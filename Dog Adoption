@@ -1,0 +1,161 @@
+//Kennedy Johnson
+//Project 1
+//06/16/2021
+
+
+import java.util.*;
+import java.io.*;  
+
+public class Project1{
+
+    static int numOfOwners; 
+    static int[][] ownersPref, dogPref, potentialOwnerMatch;
+    static int[] proposals;
+
+    public static void main(String[] args) {
+        getInput();
+        Arrays.fill(proposals, 0);
+
+        //Populates the Owners with 0s to show no match
+        for(int i = 0; i < numOfOwners; i++){
+            for(int j = 0; j < 2; j++ ){
+                potentialOwnerMatch[i][j] = 0; 
+            }
+        }
+
+        //Reads the files 
+        for (int[] a : potentialOwnerMatch) {
+            for (int b : a) {
+                System.out.print(b + " ");
+            }
+            System.out.println();
+        }
+        for (int[] a : ownersPref) {
+            for (int b : a) {
+                System.out.print(b + " ");
+            }
+            System.out.println();
+        }
+        for (int[] a : dogPref) {
+            for (int b : a) {
+                System.out.print(b + " ");
+            }
+            System.out.println();
+        }     
+        for(int a: proposals){
+            System.out.println(a);
+        }
+       
+
+
+        // while(){
+            for(int i = 0; i < numOfOwners; i++){
+                for(int j = 0; j < 2; j++ ){
+                    if(potentialOwnerMatch[i][j] == 0 || proposals[i] <= 0){
+                        propose(i, proposals[i]); 
+                        accept(potentialOwnerMatch,proposals[i]);
+
+
+                        //reads the current potential matches and their doggos
+                        for (int[] a : potentialOwnerMatch) {
+                            for (int b : a) {
+                                System.out.print(b + " ");
+                            }
+                            System.out.println();
+                        }
+
+
+                        //Reaches here and does what it should
+                            
+                        }
+                    } 
+                }
+            } // main ends
+
+        // }
+
+    public static int find(int a, int[] b) {
+        for (int i = 0; i < b.length; i++) {
+            if (a == b[i]) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+    public static void propose(int x, int y){
+        potentialOwnerMatch[x][y] = ownersPref[x][y];
+        proposals[x] += 1;
+        //Is counting proposals and adding the amount to the owners
+        
+    }
+
+    //checks to see if the owners have the same dog, picks the dogs preferred
+    public static boolean accept(int[][] pMatch, int dog){
+        int human1 = -1;
+        int human2 = -1; 
+        for(int i = 0; i < numOfOwners; i++){
+            for(int j = 0; j < 2; j++){
+                if(potentialOwnerMatch[i][j] == dog){
+                    human1 = i; 
+                    break;
+                }
+            }   
+        }
+
+        for(int i = 0; i < numOfOwners; i++){
+            for(int j = 0; j < 2; j++){
+                if(potentialOwnerMatch[i][j] == dog){
+                    if(i != human1){
+                        human2 = i;
+                        break; 
+                    }
+                     
+                }
+            }   
+        }   
+        if(human1 < human2){
+           potentialOwnerMatch[human2][find(dog,potentialOwnerMatch[human1])] = 0;
+       } else {
+           potentialOwnerMatch[human1][find(dog,potentialOwnerMatch[human2])] = 0;
+       }
+        return true;
+    }
+
+    //gets the input from the file!
+    private static void getInput() {
+        Scanner sc = null;
+            try {
+                     //Note the filename is input.txt without any mention of the path
+                sc = new Scanner(new File("input.txt"));
+                }
+                catch(FileNotFoundException e) {
+                    System.out.println("Did you forget the input file?");
+                    System.exit(1);
+            }
+               // int pos = 0, 
+                numOfOwners = sc.nextInt();
+        
+                ownersPref = new int[numOfOwners][numOfOwners * 2];
+                dogPref = new int[numOfOwners * 2][numOfOwners];  
+        
+                potentialOwnerMatch = new int[numOfOwners][2];
+                proposals = new int[numOfOwners];
+
+
+                for(int i = 0; i < numOfOwners; i++){
+                    for(int j = 0; j < numOfOwners*2; j++){
+                            ownersPref[i][j] = sc.nextInt(); 
+                    }
+                }
+                for(int i = 0; i < numOfOwners*2; i++){
+                    for(int j = 0; j < numOfOwners; j++){
+                            dogPref[i][j] = sc.nextInt(); 
+                       }
+                }
+            }
+    }
+
+  
+
+   // Reading from input.txt and filling theData
